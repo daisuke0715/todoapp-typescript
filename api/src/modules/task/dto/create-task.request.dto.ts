@@ -3,5 +3,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class createTaskRequestDto {
   @IsNotEmpty()
+  title: string;
   @ApiProperty()
+  status: number;
 }
