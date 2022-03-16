@@ -4,18 +4,18 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { TaskModule } from './modules/task/task.module';
-import { TaskEntity } from './database/entities/task.entity'
+import { Task } from './database/entities/task.entity'
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'db',
       port: 3306,
-      username: 'root',
+      username: 'user',
       password: 'root',
       database: 'sample',
-      entities: [TaskEntity],
+      entities: [Task],
       synchronize: true,
     }),
     TaskModule

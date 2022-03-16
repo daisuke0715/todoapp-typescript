@@ -21,12 +21,11 @@ services:
     build:
       context: .
       dockerfile: ./db/Dockerfile
-    restart: always
     hostname: db
     platform: linux/x86_64
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: root
+      MYSQL_USER: user
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: sample
     volumes:
