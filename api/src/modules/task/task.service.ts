@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeletedResult } from 'src/common/types/response';
-import { TaskRepository } from 'src/repositories/task.repository';
+import { TaskRepository } from 'src/ripositories/task.repository';
 import { DeleteResult } from 'typeorm';
 import { createTaskRequestDto } from './dto/create-task.request.dto';
 import { TaskResponseDto } from './dto/task.response.dto';
