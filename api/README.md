@@ -74,23 +74,52 @@ Nest is [MIT licensed](LICENSE).
 
 
 ## 学習メモ
+### Nestjs ディレクトリ構成
+- main.ts
+  - entrypoint
+  - bootstrapを実行
+  - AppModule（app.module）
 
-### 環境構築
-- Docker buildコマンドmysqlの処理でエラーを吐いた
-  - エラーメッセージ：`load metadata for docker.io/library/mysql:5.7:`
-  <br>
-  - 調査結果
-    - m1チップのCPUアーキテクチャであるarm64に未だ対応していないimageがいくつかあるらしい
-    > ARM64 アーキテクチャー向けのイメージがすべて利用可能となっているわけではありません。Intel イメージの実行には、エミュレーションのもとで--platform linux/amd64をつけて実行することが必要です。 特に mysql イメージは ARM64 向けには利用できません。 これに対する当面の対処としては mariadb イメージを利用してください。（Docker公式より引用：https://matsuand.github.io/docs.docker.jp.onthefly/desktop/mac/apple-silicon/#known-issues）
-  - 対応策
-    - platformをlinux/x64に指定してbuildする必要があるみたいなので、指定
+- app.module
+  - exportクラス
+  - @Module（Decorator）
+  - Decorator = クラスにmeta情報を付加する
+  - 外部とのmoduleの管理に責務を持つ
+
+- controller
+  - reqとresの対応関係の定義
+  ```
+  @GET('url')  // httpメソッド、urlの定義
+  gethello() {    // 実行メソッド
+    ... 処理
+  }
+  ```
+  - routingの責務を持つ
+- service
+  - fatcontrollerになるのを防止のため具体の処理はserviceで実装して適切なタイミングでcontrollerからメソッドを呼び出す
+  - 呼び出し方 `constructor(private readonly appService: AppService) {}`でcontrollerのコンストラクタ引数にAppServiceが指定されているので、thisで呼び出し可能
+  - 毎回インスタンス生成すると、メモリ喰っちゃうからシングルトンにしている感じなのか
+  - インスタンス化するクラスをAppModuleの内部にまとめて、main.tsでAppModuleをインスタンス化する際に、紐づくcontrollerやserviceも一緒にインスタンス化しているイメージ？（DIか）
+  - 具体的な処理に責務を持つ
 
 
-- Dockerコンテナ立ち上げ時にvolumeのpathの箇所でエラー吐いた
-  - エラーメッセージ：`mount path must be absolute`
-    - 相対パスで指定していたnode_modulesのpathを絶対パスに編集
+
+### 開発の流れ
+- `nest g module <module名>` => module作成
+- `nest g controller <controller名>` => controller作成
+- `nest g service <service名>` => service作成
 
 
 <br>
-### 実装
-- 
+### 動作確認
+- サーバーの起動
+  - `npm run start:dev`コマンド実行でサーバーが起動
+
+
+
+
+### 参考資料
+[NestJS の基礎概念の図解と要約](https://zenn.dev/morinokami/articles/nestjs-overview)
+[【NestJS】TODOリストでCRUDの処理を実装](https://zenn.dev/chida/articles/bba2b5346414ed)
+[NestJS の @nestjs/swagger でコントローラーから Open API(Swagger) の定義書を生成する](https://qiita.com/odanado/items/60456ab3388f834dc9ca)
+[TypeScript +NestJSをプロジェクトで導入したら素晴らしかった件](https://zenn.dev/naonao70/articles/a91d8835f1832b)
