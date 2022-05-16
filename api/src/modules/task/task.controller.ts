@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import {  ApiExtraModels, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { response } from 'express';
 import { ApiErrorResponse, ApiSuccessResponse } from 'src/common/decoraters';
 import { CommonResponse, CreatedResponse, DeletedResult, NotFoundResponse, OkResponse, UnAuthorizedResponse } from 'src/common/types/response';
 import { DeleteResult } from 'typeorm';
@@ -31,9 +32,7 @@ export class TaskController {
   @ApiSuccessResponse(OkResponse, TasksResponseDto)
   async getTasks(): Promise<CommonResponse> {
     let responseData: TasksResponseDto;
-
     responseData = await this._taskService.getTasks();
-
     return new OkResponse(responseData);
   }
 
