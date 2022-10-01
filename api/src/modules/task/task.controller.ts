@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import {  ApiExtraModels, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { response } from 'express';
 import { ApiErrorResponse, ApiSuccessResponse } from 'src/common/decoraters';
 import { CommonResponse, CreatedResponse, DeletedResult, NotFoundResponse, OkResponse, UnAuthorizedResponse } from 'src/common/types/response';
 import { DeleteResult } from 'typeorm';
@@ -21,7 +22,7 @@ export class TaskController {
   @ApiExtraModels(CreatedResponse, TaskResponseDto)
   @ApiSuccessResponse(CreatedResponse, TaskResponseDto)
   async createTask(@Body() param: createTaskRequestDto): Promise<CommonResponse> {
-    let responseData: ;
+    let responseData: TaskResponseDto;
     responseData = await this._taskService.createTask(param);
     return new CreatedResponse(responseData);
   }
@@ -30,18 +31,16 @@ export class TaskController {
   @ApiExtraModels(OkResponse, TasksResponseDto)
   @ApiSuccessResponse(OkResponse, TasksResponseDto)
   async getTasks(): Promise<CommonResponse> {
-    let responseData: ;
-
+    let responseData: TasksResponseDto;
     responseData = await this._taskService.getTasks();
-
     return new OkResponse(responseData);
   }
 
   @Get(':taskId')
   @ApiExtraModels(OkResponse, TaskResponseDto)
   @ApiSuccessResponse(OkResponse, TaskResponseDto)
-  async findTask(@Param('taskId') taskId): Promise<CommonResponse> {
-    let responseData: ;
+  async findTask(@Param('taskId') taskId: number): Promise<CommonResponse> {
+    let responseData: TaskResponseDto;
     responseData = await this._taskService.findTask(taskId);
     return new OkResponse(responseData);
   }
@@ -50,10 +49,10 @@ export class TaskController {
   @ApiExtraModels(OkResponse, TaskResponseDto)
   @ApiSuccessResponse(OkResponse, TaskResponseDto)
   async updateTask(
-    @Param('taskId') taskId,
+    @Param('taskId') taskId: number,
     @Body() param: updateTaskRequestDto,
   ): Promise<CommonResponse> {
-    let responseData: ;
+    let responseData: TaskResponseDto;
     responseData = await this._taskService.updateTask(taskId, param);
     return new OkResponse(responseData);
   }
@@ -61,8 +60,8 @@ export class TaskController {
   @Delete(':taskId')
   @ApiExtraModels(OkResponse, DeletedResult)
   @ApiSuccessResponse(OkResponse, DeletedResult)
-  async delteTask(@Param('taskId') taskId): Promise<CommonResponse> {
-    let responseData: ;
+  async delteTask(@Param('taskId') taskId: number): Promise<CommonResponse> {
+    let responseData: DeleteResult;
     responseData = await this._taskService.deleteTask(taskId);
     return new OkResponse(responseData);
   }

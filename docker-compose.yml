@@ -10,9 +10,10 @@ services:
       - 'db'
     ports:
       - '3000:3000'
+    platform: linux/x86_64
     volumes:
       - ./api:/src
-      - ./src/node_modules
+      - /src/node_modules
     tty: true
     container_name: api
 
@@ -20,11 +21,11 @@ services:
     build:
       context: .
       dockerfile: ./db/Dockerfile
-    restart: always
     hostname: db
+    platform: linux/x86_64
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: root
+      MYSQL_USER: user
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: sample
     volumes:
